@@ -1,0 +1,20 @@
+class Solution {
+    public int reverse(int x) {
+
+        if (x == 0) return 0;
+
+
+        String s = String.valueOf(Math.abs(x));
+        StringBuilder rev = new StringBuilder();
+        for(int i = s.length()-1 ;i>=0;i -- ){
+            if(rev.length() == 0 && s.charAt(i) == '0'){
+                continue;
+            }
+            rev.append(s.charAt(i));
+        }
+        // the exception is for number out of pow(2,32) to -pow(2,32)
+        try{ return Integer.parseInt(rev.toString())*(x<0?-1:1);}catch(NumberFormatException e){
+            return 0;
+        }
+    }
+}
