@@ -1,0 +1,55 @@
+import java.math.BigDecimal;
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+ BigDecimal TEN = new BigDecimal(10);
+        BigDecimal sum = new BigDecimal(0);
+        int i = 0;
+        while (l1 != null && l2 != null) {
+
+            sum = TEN.pow(i).multiply(new BigDecimal(l1.val + l2.val)).add(sum);
+
+            //sum +=   (l1.val + l2.val) * Math.pow(10, i);
+            l1 = l1.next;
+            l2 = l2.next;
+            i++;
+        }
+
+
+        while (l1 != null) {
+            //sum += l1.val * Math.pow(10, i);
+            sum = sum.add(TEN.pow(i).multiply(new BigDecimal(l1.val)));
+
+            l1 = l1.next;
+            i++;
+        }
+
+        while (l2 != null) {
+            sum = sum.add(TEN.pow(i).multiply(new BigDecimal(l2.val)));
+            // sum += l2.val * Math.pow(10, i);
+
+            l2 = l2.next;
+            i++;
+        }
+
+
+        ListNode head, pointer;
+        head = new ListNode();
+        pointer = head;
+        //put result to a new list
+
+
+        while (true) {
+            pointer.val = sum.remainder(TEN).intValue();
+            //pointer.val = (int) (sum % 10);
+            //sum = (long) (sum / 10); // remove fractions.
+            sum = sum.divide(TEN);
+           if (sum.compareTo(new BigDecimal(1)) < 0) {
+                break;
+            }
+            pointer.next = new ListNode();
+            pointer = pointer.next;
+        }
+
+        return head;
+    }
+}
