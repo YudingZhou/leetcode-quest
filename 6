@@ -1,0 +1,30 @@
+class Solution {
+    //重新理解题目的本质，不要把图形化的打印想象成2位数组，这样就走远了。
+    //从结果看，需要n排，去掉空格的，字符串连接起来
+    //添加规律是从0到boundary，再从boundary到0，这样反复添加。
+    public String convert(String s, int numRows) {
+        if (numRows == 1) return s;
+
+        int order = -1;
+        StringBuilder [] stringBuilders = new StringBuilder[numRows];
+        for(int i  = 0; i < numRows; i++){
+            stringBuilders[i] = new StringBuilder();
+        }
+
+        int i = 0 ;
+        int row = 0;
+        while(i < s.length()){
+            if(row == 0 || row == numRows - 1){
+                order *= -1;//how clever
+            }
+            stringBuilders[row].append(s.charAt(i++)) ;
+            row+=order;
+        }
+
+        for(int j = 1 ; j < numRows;j ++ ){
+            stringBuilders[0].append(stringBuilders[j]);
+        }
+        
+        return stringBuilders[0].toString();
+    }
+}
