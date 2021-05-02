@@ -1,0 +1,20 @@
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+         int head, tail, length, repeatIdx;
+        head = tail = length = 0;
+
+        while (tail < s.length()) {
+            char c = s.charAt(tail);
+            repeatIdx = s.substring(head, tail).indexOf(c); // sliding window
+            if (repeatIdx > -1) {
+                head += repeatIdx + 1;
+            }
+            if ((tail - head + 1) > length) {
+                length = tail - head + 1;
+            }
+            tail++;
+        }
+
+        return length;
+    }
+}
