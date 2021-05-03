@@ -1,0 +1,38 @@
+class Solution {
+    public int maxArea(int[] height) {
+        //sliding window, calculating maximum space of the window
+
+       /* int head, tail, space,max;
+        head = tail = space = max = 0;
+
+        for( int i = 0; i < height.length; i ++  ){
+            for(int j = 0; j < height.length; j ++ ){
+                space = (j - i ) * Math.min(height[i], height[j]);
+                if(space > max) {
+                    max = space;
+                }
+            }
+        }*/
+
+ //上面为暴力解答，算法复杂度为O(n2). 
+ //下面参考题解，双向指针，像中间移动，数学证明消除排列组合数量推导见题解。
+            int left, right, max;
+        left = max = 0;
+        right = height.length - 1;
+        while (left < right) {
+            int i = (right - left) * Math.min(height[right], height[left]);
+            if (i > max) {
+                max = i;
+            }
+            if (height[left] < height[right]) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+
+        return max;
+
+       // return max;
+    }
+}
