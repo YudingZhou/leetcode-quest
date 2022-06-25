@@ -1,24 +1,60 @@
-def merge(arr_a, start_a, end_a, arr_b, start_b, end_b):
-    merged_arr = []
-    idx_a = start_a
-    idx_b = start_b
-    while idx_a < end_a and idx_b < end_b:
-        if arr_a[idx_a] > arr_b[idx_b]:
-            merged_arr.append(arr_b[idx_b])
-            idx_b += 1
-        else:
-            merged_arr.append(arr_a[idx_a])
-            idx_a += 1
+"""
+ 1. recursive level 1, choose 5 as the pivot, splitting
+ S = [5, 4, 7, 6, 2, 1, 3]
+ P = 5
+      S = [4, 2, 1, 3, (5), 7, 6]
 
-    while idx_a < end_a:
-        merged_arr.append(arr_a[idx_a])
-        idx_a += 1
+          2.1 recursive level 2
+          S1 = [4, 2, 1, 3]
+          P = 4
+                    3.1 recursive level 3
+                    S = [2, 1, 3, (4)]
+                    S1 = [2, 1 ,3]
+                        P = 2
+                            S = [1, (2), 3]
+                            S1 = [1]
+                            S2 = [3]
 
-    while idx_b < end_b:
-        merged_arr.append(arr_b[idx_b])
-        idx_b += 1
+                    S2 = []
 
-    return merged_arr
+          2.2 recursive level 2
+          S2 = [7, 6]
+          P = 7
+                    S = [6, (7)]
+                    S1 = [6]
+                    S2 = []
+
+recursive tree level - 1
+    S = [4, 2, 1, 3, (5), 7, 6]
+
+recursive tree level - 2
+    S = [ 2, 1, 3, ((4)), (5), 6, ((7))]
+
+recursive tree level - 3
+    S = [ 1, (((2))), 3, ((4)), (5), 6, ((7))]
+"""
+
+
+def pivot(arr, m, n, pivot_idx) -> int:
+    for idx in range(m, n + 1):
+        if arr[idx] < arr[pivot_idx]:
+            arr[idx], arr[pivot_idx] = arr[pivot_idx], arr[idx]
+            pivot_idx = idx
+    return pivot_idx
+
+
+def quick_sort(arr, m, n):
+    if n > m:
+        pivot_idx = pivot(arr, m, n, m)
+        """
+        caveat, shall the pivot not be included in the subroutine
+        previously, implementation is as the following
+            quick_sort(arr, m, pivot_idx )
+        the pivot gets included in one of the sub-routine which is wrong.
+        """
+        quick_sort(arr, m, pivot_idx - 1)
+        quick_sort(arr, pivot_idx + 1, n)
+    return arr
 
 
 from unittest import TestCase as tc
@@ -26,21 +62,39 @@ from unittest import TestCase as tc
 
 class Test(tc):
     def test1(self):
-        a = [1]
-        b = [2] 
-        self.assertListEqual([1, 2], merge(a, 0, len(a), b, 0, len(b)))
+        arr = [5, 4, 2, 1, 3, 7, 6]
+        pivot(arr, 0, len(arr) - 1, 0)
+        self.assertListEqual([4, 2, 1, 3, 5, 7, 6], arr)
 
     def test2(self):
-        a = [1, 3, 5]
-        b = [2, 4, 6]
-        self.assertListEqual([1, 2, 3, 4, 5, 6], merge(a, 0, len(a), b, 0, len(b)))
+        arr = [2, 1]
+        pivot(arr, 0, len(arr) - 1, 0)
+        self.assertListEqual([1, 2], arr)
 
     def test3(self):
-        a = [1]
-        b = [2, 4, 6]
-        self.assertListEqual([1, 2, 4, 6], merge(a, 0, len(a), b, 0, len(b)))
+        arr = [1]
+        pivot(arr, 0, len(arr) - 1, 0)
+        self.assertListEqual([1], arr)
 
     def test4(self):
-        a = [1, 3, 5]
-        b = [2]
-        self.assertListEqual([1, 2, 3, 5], merge(a, 0, len(a), b, 0, len(b)))
+        arr = [1, 1]
+        pivot(arr, 0, len(arr) - 1, 0)
+        self.assertListEqual([1, 1], arr)
+
+
+class Test2(tc):
+    def test1(self):
+        arr = [5, 4, 2, 1, 3, 7, 6]
+        self.assertListEqual([1, 2, 3, 4, 5, 6, 7], quick_sort(arr, 0, len(arr) - 1))
+
+    def test2(self):
+        arr = [2, 1]
+        self.assertListEqual([1, 2], quick_sort(arr, 0, len(arr) - 1))
+
+    def test3(self):
+        arr = [1]
+        self.assertListEqual([1], quick_sort(arr, 0, len(arr) - 1))
+
+    def test4(self):
+        arr = [1, 1]
+        self.assertListEqual([1, 1], quick_sort(arr, 0, len(arr) - 1))

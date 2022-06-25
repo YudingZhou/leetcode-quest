@@ -11,14 +11,12 @@
 """
 
 
-
 def binary_search(arr, m, n, x) -> int:
     if n > m:
         mid = int((m + n) / 2)
         if arr[mid] == x:
             return mid
         elif x < arr[mid]:
-
             return binary_search(arr, m, mid, x)
         else:
             return binary_search(arr, mid + 1, n, x)
