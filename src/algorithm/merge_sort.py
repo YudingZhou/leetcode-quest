@@ -1,4 +1,4 @@
-def merge(arr_a, start_a, end_a, arr_b, start_b, end_b):
+def merge(arr_a, start_a, end_a, arr_b, start_b, end_b):  # O(m + n)
     merged_arr = []
     idx_a = start_a
     idx_b = start_b
@@ -21,6 +21,26 @@ def merge(arr_a, start_a, end_a, arr_b, start_b, end_b):
     return merged_arr
 
 
+"""
+Time complexity analysis
+
+1. 
+Let total invocation number of subroutine at recursive level h, equals  x
+
+2. 
+Let depth of recursive tree = h
+Therefore, x = pow(2, h) 
+
+3. 
+Let len(arr) = n
+Therefore, x = n / 2 
+
+4. 
+Therefore, 
+n/2 = pow( 2, h )  -> n = 2 * pow(2, h) -> drop the consts -> n = pow(2,h) -> h = log2n -> drop the const -> h = logn
+"""
+
+
 def merge_sort(arr: list, m, n) -> list:
     if n > m:
         mid = int((m + n) / 2)
@@ -28,6 +48,8 @@ def merge_sort(arr: list, m, n) -> list:
         sub_arr_right = merge_sort(arr, mid + 1, n)
         idx_left = idx_right = 0
         merged_arr = []
+
+        # O ( n - m )
         while idx_left < len(sub_arr_left) and idx_right < len(sub_arr_right):
             if sub_arr_left[idx_left] > sub_arr_right[idx_right]:
                 merged_arr.append(sub_arr_right[idx_right])
