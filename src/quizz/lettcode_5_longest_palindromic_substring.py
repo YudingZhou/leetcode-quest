@@ -81,6 +81,80 @@ def LPS3(_string, m, n, memo) -> str:
     return ret_val
 
 
+def LPS4(s) -> int:
+    MAX = 0
+    max_m = int(len(s) / 2)
+    for x, val in enumerate(s):
+        current = 0
+        m = 0
+        while x - m > -1 and x + m < len(s) and m <= max_m:
+            a = x - m
+            b = x + m
+            if s[a] == s[b]:
+                if a == b:
+                    current = 1
+                else:
+                    current += 2
+                m = m + 1
+            else:
+                break
+
+        if current > MAX:
+            MAX = current
+
+        if x + 1 < len(s):
+            current = 0
+            m = 0
+            while x - m > -1 and x + 1 + m < len(s) and m <= max_m:
+                a = x - m
+                b = x + 1 + m
+                if s[a] == s[b]:
+                    current += 2
+                else:
+                    break
+                m = m + 1
+            if current > MAX:
+                MAX = current
+    return MAX
+
+
+def LPS5(s) -> int:
+    MAX = ""
+    max_m = int(len(s) / 2)
+    for x, val in enumerate(s):
+        current = ""
+        m = 0
+        while x - m > -1 and x + m < len(s) and m <= max_m:
+            a = x - m
+            b = x + m
+            if s[a] == s[b]:
+                if a == b:
+                    current = s[a]
+                else:
+                    current = f"{s[a]}{current}{s[b]}"
+                m = m + 1
+            else:
+                break
+
+        if len(current) > len(MAX):
+            MAX = current
+
+        if x + 1 < len(s):
+            current = ""
+            m = 0
+            while x - m > -1 and x + 1 + m < len(s) and m <= max_m:
+                a = x - m
+                b = x + 1 + m
+                if s[a] == s[b]:
+                    current = f"{s[a]}{current}{s[b]}"
+                else:
+                    break
+                m = m + 1
+            if len(current) > len(MAX):
+                MAX = current
+    return MAX
+
+
 from unittest import TestCase as tc
 
 
@@ -196,3 +270,62 @@ class Test3(tc):
         memo = [[None for j in range(len(given))] for i in range(len(given))]
         cut = LPS3(given, 0, len(given) - 1, memo)
         self.assertEqual("aca", cut)
+
+
+class Test4(tc):
+    def test1(self):
+        given = "a"
+        cut = LPS4(given)
+        self.assertEqual(1, cut)
+
+    def test2(self):
+        given = "ab"
+        cut = LPS4(given)
+        self.assertEqual(1, cut)
+
+    def test3(self):
+        given = "aba"
+        cut = LPS4(given)
+        self.assertEqual(3, cut)
+
+    def test4(self):
+        given = "aabb"
+        cut = LPS4(given)
+        self.assertEqual(2, cut)
+
+    def test5(self):
+        given = "1abba"
+        cut = LPS4(given)
+        self.assertEqual(4, cut)
+
+    def test6(self):
+        given = "1abba1aabaa1"
+        cut = LPS4(given)
+        self.assertEqual(7, cut)
+
+
+class Test5(tc):
+    def test1(self):
+        given = "1"
+        cut = LPS5(given)
+        self.assertEqual("1", cut)
+
+    def test2(self):
+        given = "11"
+        cut = LPS5(given)
+        self.assertEqual("11", cut)
+
+    def test3(self):
+        given = "12"
+        cut = LPS5(given)
+        self.assertEqual("1", cut)
+
+    def test4(self):
+        given = "121"
+        cut = LPS5(given)
+        self.assertEqual("121", cut)
+
+    def test4(self):
+        given = "1211"
+        cut = LPS5(given)
+        self.assertEqual("121", cut)
